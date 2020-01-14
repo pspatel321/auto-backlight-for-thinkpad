@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auto Keyboard Backlight", "Auto Keyboard Backlight\Auto Keyboard Backlight.csproj", "{75911CFF-131A-47CC-90AA-7022C2DD2CCA}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Auto Keyboard Backlight Setup", "Auto Keyboard Backlight Setup\Auto Keyboard Backlight Setup.vdproj", "{D55CD635-5012-4112-84FD-024052E61F0C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75911CFF-131A-47CC-90AA-7022C2DD2CCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75911CFF-131A-47CC-90AA-7022C2DD2CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75911CFF-131A-47CC-90AA-7022C2DD2CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75911CFF-131A-47CC-90AA-7022C2DD2CCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D55CD635-5012-4112-84FD-024052E61F0C}.Debug|Any CPU.ActiveCfg = Debug
+		{D55CD635-5012-4112-84FD-024052E61F0C}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6398547-081D-40CD-919A-41814793D582}
+	EndGlobalSection
+EndGlobal
