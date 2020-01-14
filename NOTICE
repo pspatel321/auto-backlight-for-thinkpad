@@ -1,10 +1,10 @@
    =========================================================================
    ==  NOTICE file corresponding to the section 4 d of                    ==
    ==  the Apache License, Version 2.0,                                   ==
-   ==  in this case for the Auto Keyboard Backlight code.                 ==
+   ==  in this case for the Auto Backlight for ThinkPad code.             ==
    =========================================================================
    
-Auto Keyboard Backlight
+Auto Backlight for ThinkPad
 https://github.com/pspatel321/auto-backlight-for-thinkpad
 Copyright 2019 Parth Patel
 
@@ -35,3 +35,36 @@ licensed under The Code Project Open License (CPOL).
 You may obtain a copy of the License at
 
     https://www.codeproject.com/info/cpol.aspx
+
+   =========================================================================
+   ==  NOTICE file corresponding to the section 4 d of                    ==
+   ==  the Apache License, Version 2.0,                                   ==
+   ==  in this case for the Accord.NET Framework binaries.                ==
+   =========================================================================
+   
+The Accord.NET Framework
+http://accord-framework.net/
+Copyright 2014 Cesar Souza, Andrew Kirillov, Marcos Diego Catalano, and
+   Accord.NET contributors
+
+This product includes software developed as part of The Accord.NET Framework
+licensed under the GNU LESSER GENERAL PUBLIC LICENSE Version 2.1
+You may obtain a copy of the License at
+
+    https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html
+
+   =========================================================================
+   ==  NOTICE file corresponding to the section 4 d of                    ==
+   ==  the Apache License, Version 2.0,                                   ==
+   ==  in this case for the OxyPlot binaries.                             ==
+   =========================================================================
+   
+OxyPlot
+https://oxyplot.github.io/
+Copyright 2017 Oystein Bjorke
+
+This product includes software developed as part of OxyPlot licensed under
+the MIT License
+You may obtain a copy of the License at
+
+    https://raw.githubusercontent.com/oxyplot/oxyplot/master/LICENSE
