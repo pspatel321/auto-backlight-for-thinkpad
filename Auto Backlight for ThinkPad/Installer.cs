@@ -34,7 +34,11 @@ namespace Auto_Backlight_for_ThinkPad
             base.OnCommitted(savedState);
 
             // Prepare temporary file describing a task (xml) in Task Scheduler from resource template
-            string xml = Properties.Resources.task;
+            string xml = "";
+            using (var res = Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Program), "task.xml"))
+            using (var str = new StreamReader(res, true))
+                xml = str.ReadToEnd();
+
             xml = xml.Replace("{Author}", Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCompanyAttribute>().Company);
             xml = xml.Replace("{Description}", Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyDescriptionAttribute>().Description);
             xml = xml.Replace("{URI}", "\"" + "\\" + Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product + "\"");

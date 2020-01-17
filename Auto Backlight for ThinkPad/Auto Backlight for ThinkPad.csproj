@@ -64,8 +64,11 @@
   <PropertyGroup>
     <ApplicationIcon>Auto Backlight for Thinkpad.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Auto Backlight for Thinkpad.manifest</ApplicationManifest>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <ApplicationManifest>Auto Backlight for Thinkpad.debug.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <ApplicationManifest>Auto Backlight for Thinkpad.release.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
@@ -156,12 +159,6 @@
     </Compile>
     <Compile Include="Backlight.cs" />
     <Compile Include="AutoScreenBrightnessController.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Settings_tmpl.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Settings_tmpl.tt</DependentUpon>
-    </Compile>
     <Compile Include="PowerTracker.cs" />
     <Compile Include="AutoKeyboardBacklightController.cs" />
     <Compile Include="WebCam.cs" />
@@ -170,47 +167,33 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Resource Include="task.xml" />
-    <None Include="..\packages\Accord.3.8.0\lib\net45\Accord.dll">
+    <EmbeddedResource Include="task.xml" />
+    <EmbeddedResource Include="..\packages\Accord.3.8.0\lib\net45\Accord.dll">
       <Link>Accord.dll</Link>
-    </None>
-    <None Include="..\packages\Accord.Imaging.3.8.0\lib\net45\Accord.Imaging.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\Accord.Imaging.3.8.0\lib\net45\Accord.Imaging.dll">
       <Link>Accord.Imaging.dll</Link>
-    </None>
-    <None Include="..\packages\Accord.Math.3.8.0\lib\net45\Accord.Math.Core.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\Accord.Math.3.8.0\lib\net45\Accord.Math.Core.dll">
       <Link>Accord.Math.Core.dll</Link>
-    </None>
-    <None Include="..\packages\Accord.Math.3.8.0\lib\net45\Accord.Math.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\Accord.Math.3.8.0\lib\net45\Accord.Math.dll">
       <Link>Accord.Math.dll</Link>
-    </None>
-    <None Include="..\packages\Accord.Statistics.3.8.0\lib\net45\Accord.Statistics.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\Accord.Statistics.3.8.0\lib\net45\Accord.Statistics.dll">
       <Link>Accord.Statistics.dll</Link>
-    </None>
-    <None Include="..\packages\Accord.Video.3.8.0\lib\net45\Accord.Video.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\Accord.Video.3.8.0\lib\net45\Accord.Video.dll">
       <Link>Accord.Video.dll</Link>
-    </None>
-    <None Include="..\packages\Accord.Video.DirectShow.3.8.0\lib\net45\Accord.Video.DirectShow.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\Accord.Video.DirectShow.3.8.0\lib\net45\Accord.Video.DirectShow.dll">
       <Link>Accord.Video.DirectShow.dll</Link>
-    </None>
-    <None Include="..\packages\OxyPlot.Wpf.2.0.0\lib\net45\OxyPlot.Wpf.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\OxyPlot.Wpf.2.0.0\lib\net45\OxyPlot.Wpf.dll">
       <Link>OxyPlot.Wpf.dll</Link>
-    </None>
-    <None Include="..\packages\OxyPlot.Core.2.0.0\lib\net45\OxyPlot.dll">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\packages\OxyPlot.Core.2.0.0\lib\net45\OxyPlot.dll">
       <Link>OxyPlot.dll</Link>
-    </None>
-    <Content Include="Settings_tmpl.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Settings_tmpl.cs</LastGenOutput>
-    </Content>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -232,10 +215,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll">
+    <EmbeddedResource Include="..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll">
       <Link>Hardcodet.Wpf.TaskbarNotification.dll</Link>
-    </None>
-    <None Include="Auto Backlight for Thinkpad.manifest" />
+    </EmbeddedResource>
+    <None Include="Auto Backlight for Thinkpad.debug.manifest" />
+    <None Include="Auto Backlight for Thinkpad.release.manifest" />
     <Content Include="License.rtf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -254,6 +238,22 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <TmplGenerator Include="Settings.tmpl.cs">
+      <LastGenOutput>Settings.cs</LastGenOutput>
+    </TmplGenerator>
+    <Compile Include="Settings.cs">
+      <Autogen>true</Autogen>
+      <DependentUpon>Settings.tmpl.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <Target Name="TmplBuild" BeforeTargets="BeforeBuild" Inputs="%(TmplGenerator.Identity)" Outputs="%(TmplGenerator.LastGenOutput)">
+    <Message Importance="high" Text="Generating code for %(TmplGenerator.Identity) ..."/>
+    <Exec Command="py tmplGenerator.py --out %(TmplGenerator.LastGenOutput) %(TmplGenerator.Identity)" />
+  </Target>
+  <Target Name="TmplClean" BeforeTargets="BeforeClean">
+    <Delete Files="%(TmplGenerator.LastGenOutput)" />
+  </Target>
   <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

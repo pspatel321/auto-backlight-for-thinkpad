@@ -16,18 +16,13 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 
 namespace Auto_Backlight_for_ThinkPad
 {
-    internal static class ModuleInitializer
-    {
-        internal static void Run()
-        {
-
-        }
-    }
     internal class Program
     {
         /// <summary>
@@ -44,75 +39,19 @@ namespace Auto_Backlight_for_ThinkPad
                 Environment.Exit(0);
             }
 
-            // Redirect loading of certain assemblies
+            // Redirect loading of certain assemblies to internal embedded resources
             AppDomain.CurrentDomain.AssemblyResolve += (sender, e) =>
             {
                 string resourceName = new AssemblyName(e.Name).Name;
-                switch (resourceName)
-                {
-                    case "Hardcodet.Wpf.TaskbarNotification":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Hardcodet_Wpf_TaskbarNotification;
-                            return Assembly.Load(res);
-                        }
-                    case "OxyPlot":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.OxyPlot;
-                            return Assembly.Load(res);
-                        }
-                    case "OxyPlot.Wpf":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.OxyPlot_Wpf;
-                            return Assembly.Load(res);
-                        }
-                    case "Accord":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Accord;
-                            return Assembly.Load(res);
-                        }
-                    case "Accord.Imaging":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Accord_Imaging;
-                            return Assembly.Load(res);
-                        }
-                    case "Accord.Math.Core":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Accord_Math_Core;
-                            return Assembly.Load(res);
-                        }
-                    case "Accord.Math":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Accord_Math;
-                            return Assembly.Load(res);
-                        }
-                    case "Accord.Statistics":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Accord_Statistics;
-                            return Assembly.Load(res);
-                        }
-                    case "Accord.Video.DirectShow":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Accord_Video_DirectShow;
-                            return Assembly.Load(res);
-                        }
-                    case "Accord.Video":
-                        {
-                            // Direct to internal resource
-                            var res = Properties.Resources.Accord_Video;
-                            return Assembly.Load(res);
-                        }
-                    default:
-                        return null;
-                }
+                using (var res = Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Program), resourceName + ".dll"))
+                    if (res != null)
+                    {
+                        var len = res.Length;
+                        var arr = new byte[len];
+                        res.Read(arr, 0, (int)len);
+                        return Assembly.Load(arr);
+                    }
+                return null;
             };
 
             // Back to WPF App built-in entry point

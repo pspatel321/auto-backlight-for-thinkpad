@@ -111,7 +111,7 @@ namespace Auto_Backlight_for_ThinkPad
                 if (_hke.HotKey != value)
                 {
                     _hke = new HotKeyEvent(value);
-                    _hke.Triggered += (sender, e) => Retrigger();
+                    _hke.Triggered += (sender, e) => { if (Enabled) _ = Retrigger(); };
                     HotKey hk = _hke.HotKey;
 
                     // Re-register the hotkey if it is valid
@@ -185,11 +185,18 @@ namespace Auto_Backlight_for_ThinkPad
         /// <summary>
         /// Start processing operations for this mode, same as <see cref="Enabled"/>=true.
         /// </summary>
-        public void Start() => Enabled = true;
+        public void Start(bool trigNow = true)
+        {
+            _timer.Start();
+            if (trigNow) _ = Retrigger();
+        }
         /// <summary>
         /// Stop processing operations for this mode, same as <see cref="Enabled"/>=false.
         /// </summary>
-        public void Stop() => Enabled = false;
+        public void Stop()
+        {
+            _timer.Stop();
+        }
         /// <summary>
         /// Enable the timer for periodically sampling ambient light level and changing screen brightness
         /// </summary>
@@ -201,15 +208,8 @@ namespace Auto_Backlight_for_ThinkPad
                 if (_enabled != value)
                 {
                     _enabled = value;
-                    if (value)
-                    {
-                        _timer.Start();
-                        Retrigger();
-                    }
-                    else
-                    {
-                        _timer.Stop();
-                    }
+                    if (value) Start();
+                    else Stop();
                 }
             }
         }
@@ -235,11 +235,13 @@ namespace Auto_Backlight_for_ThinkPad
         public AutoScreenBrightnessController(GlobalHotKey ghk)
         {
             _ghk = ghk;
-            _hke = new HotKeyEvent(new HotKey());
-            _hke.Triggered += (sender, ev) => Retrigger();
+            HotKey = new HotKey();
 
             _timer = new DispatcherTimer();
-            _timer.Tick += (sender, ev) => Retrigger();
+            _timer.Tick += (sender, ev) =>
+            {
+                if (Enabled) _ = Retrigger();
+            };
             PollPeriod = double.PositiveInfinity;
             _webCam = new WebCam();
         }
@@ -252,7 +254,7 @@ namespace Auto_Backlight_for_ThinkPad
         private DispatcherTimer _timer;
         private WebCam _webCam;
         private GlobalHotKey _ghk;
-        private HotKeyEvent _hke;
+        private HotKeyEvent _hke = new HotKeyEvent(null);
         private double _curvature = 0.5;
     }
 }

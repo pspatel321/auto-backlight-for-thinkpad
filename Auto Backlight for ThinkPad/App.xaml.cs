@@ -64,8 +64,7 @@ namespace Auto_Backlight_for_ThinkPad
             _autoScreen = new AutoScreenBrightnessController(gh);
             _autoScreen.BrightnessChanged += (se, ev) =>
             {
-                var dp = new DataPoint(ev.Intensity, ev.Brightness);
-                _lastPoint = dp;
+                _lastPoint = new DataPoint(ev.Intensity, ev.Brightness);
             };
             _autoKeyboard.Activity += (se, ev) =>
             {
@@ -78,7 +77,7 @@ namespace Auto_Backlight_for_ThinkPad
                 if ((ev.Act == AutoKeyboardBacklightController.ActivityEventArgs.Activity.UserActivity) ||
                     (ev.Act == AutoKeyboardBacklightController.ActivityEventArgs.Activity.PowerResume))
                 {
-                    _autoScreen.Retrigger();
+                    if (_autoScreen.Enabled) _ = _autoScreen.Retrigger();
                 }
             };
 
@@ -96,8 +95,8 @@ namespace Auto_Backlight_for_ThinkPad
         private void _Starting(object sender, StartupEventArgs e)
         {
             // Try to get settings, if fail save a fresh copy
-            if (!_settings.RestoreFromRegistry())
-                _settings.SaveToRegistry();
+            if (!_settings.RestoreFromRegistry(RegistryKey))
+                _settings.SaveToRegistry(RegistryKey);
             _settings.PropertyChanged += _Settings_PropertyChanged;
             _settings.Update();
         }
@@ -131,7 +130,7 @@ namespace Auto_Backlight_for_ThinkPad
             if (e.PropertyName == nameof(_settings.Screen_Curvature))
                 _autoScreen.Curvature = _settings.Screen_Curvature;
 
-            _settings.SaveToRegistry();
+            _settings.SaveToRegistry(RegistryKey);
         }
         // Stop and cleanup on app exit
         private void _Exiting(object sender, ExitEventArgs e)
@@ -139,7 +138,7 @@ namespace Auto_Backlight_for_ThinkPad
             _autoKeyboard.Stop();
             _autoScreen.Stop();
 
-            _settings.SaveToRegistry();
+            _settings.SaveToRegistry(RegistryKey);
         }
         // Show the screen brightness vs ambient light level calibration window
         private void _ShowCalibration(object sender, RoutedEventArgs e)
@@ -159,20 +158,20 @@ namespace Auto_Backlight_for_ThinkPad
                 {
                     tempScreen.LearnedPoints = eve.LearnedPoints;
                     tempScreen.Curvature = eve.Curvature;
-                    tempScreen.Retrigger();
+                    _ = tempScreen.Retrigger();
                 };
                 _calibration.ManualScreenBrightness += (sen, eve) =>
                 {
                     byte br = (byte)Math.Round(eve.ScreenBrightness * 100.0);
                     tempScreen.SetBrightnessSlider(br);
-                    DataPoint dp = new DataPoint(_calibration.CurrentPoint.X, eve.ScreenBrightness);
-                    _lastPoint = dp;
-                    _calibration.CurrentPoint = dp;
+                    _lastPoint = new DataPoint(_calibration.CurrentPoint.X, eve.ScreenBrightness);
+                    _calibration.CurrentPoint = (DataPoint)_lastPoint;
                 };
                 _calibration.Closed += (sen, eve) =>
                 {
                     _calibration = null;
-                    _autoScreen.Enabled = _settings.Screen_Enabled;
+                    if (_settings.Screen_Enabled) 
+                        _autoScreen.Start(false);
                 };
                 _calibration.Apply += (sen, eve) =>
                 {
