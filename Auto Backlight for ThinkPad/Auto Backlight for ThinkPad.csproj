@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Auto_Backlight_for_ThinkPad</RootNamespace>
     <AssemblyName>Auto Backlight for ThinkPad</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -30,6 +30,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -72,35 +73,35 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.3.8.0\lib\net462\Accord.dll</HintPath>
+      <HintPath>..\packages\Accord.3.8.0\lib\net45\Accord.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Accord.Imaging, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Imaging.3.8.0\lib\net462\Accord.Imaging.dll</HintPath>
+      <HintPath>..\packages\Accord.Imaging.3.8.0\lib\net45\Accord.Imaging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.dll</HintPath>
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net45\Accord.Math.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Core.dll</HintPath>
+      <HintPath>..\packages\Accord.Math.3.8.0\lib\net45\Accord.Math.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
+      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net45\Accord.Statistics.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Accord.Video, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Video.3.8.0\lib\net462\Accord.Video.dll</HintPath>
+      <HintPath>..\packages\Accord.Video.3.8.0\lib\net45\Accord.Video.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Accord.Video.DirectShow, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Video.DirectShow.3.8.0\lib\net462\Accord.Video.DirectShow.dll</HintPath>
+      <HintPath>..\packages\Accord.Video.DirectShow.3.8.0\lib\net45\Accord.Video.DirectShow.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net451\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
@@ -225,18 +226,6 @@
     </Content>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <TmplGenerator Include="Settings.tmpl.cs">
@@ -248,7 +237,7 @@
     </Compile>
   </ItemGroup>
   <Target Name="TmplBuild" BeforeTargets="BeforeBuild" Inputs="%(TmplGenerator.Identity)" Outputs="%(TmplGenerator.LastGenOutput)">
-    <Message Importance="high" Text="Generating code for %(TmplGenerator.Identity) ..."/>
+    <Message Importance="high" Text="Generating code for %(TmplGenerator.Identity) ..." />
     <Exec Command="py tmplGenerator.py --out %(TmplGenerator.LastGenOutput) %(TmplGenerator.Identity)" />
   </Target>
   <Target Name="TmplClean" BeforeTargets="BeforeClean">

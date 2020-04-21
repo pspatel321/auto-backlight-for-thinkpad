@@ -76,9 +76,9 @@ namespace Auto_Backlight_for_ThinkPad
 
                 // Find the integrated camera device
                 var coll = new FilterInfoCollection(FilterCategory.VideoInputDevice);
-                if (!coll.Any(fi => fi.Name == "Integrated Camera"))
+                if (!coll.Any(fi => fi.MonikerString.StartsWith(@"@device:pnp:\\?\usb#vid_5986&pid_2115")))
                     throw new Exception("Integrated Camera device not found");
-                _vdev = new VideoCaptureDevice(coll.First(fi => fi.Name == "Integrated Camera").MonikerString);
+                _vdev = new VideoCaptureDevice(coll.First(fi => fi.MonikerString.StartsWith(@"@device:pnp:\\?\usb#vid_5986&pid_2115")).MonikerString);
 
                 // Initial settings and hook handlers
                 _vdev.VideoResolution = _vdev.VideoCapabilities.First(sn => sn.FrameSize == new System.Drawing.Size(320, 240));

@@ -168,7 +168,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.6.2"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.5.2"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=671728"
                 }
@@ -253,7 +253,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Auto Backlight for ThinkPad"
         "ProductCode" = "8:{DC84E5F0-AF44-4C0A-A7C0-6A4EB2B3075B}"
-        "PackageCode" = "8:{A3BE55EA-41C7-47D2-B8CE-1DB82D8C68BF}"
+        "PackageCode" = "8:{FAC92E3E-A392-4156-AE1A-965891EEDF49}"
         "UpgradeCode" = "8:{A78F780D-063F-4852-AC1B-D20FB7165BA2}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -769,7 +769,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_468678F09DD54D4EAB80D9E38E171441"
             {
-            "SourcePath" = "8:..\\Auto Backlight for ThinkPad\\obj\\Release\\Auto Backlight for ThinkPad.exe"
+            "SourcePath" = "8:..\\Auto Backlight for ThinkPad\\obj\\Debug\\Auto Backlight for ThinkPad.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_769FDD44CBBA415F808C9CF9333BF6AF"

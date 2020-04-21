@@ -96,7 +96,10 @@ namespace Auto_Backlight_for_ThinkPad
         {
             // Try to get settings, if fail save a fresh copy
             if (!_settings.RestoreFromRegistry(RegistryKey))
+            {
                 _settings.SaveToRegistry(RegistryKey);
+                RegistryKey.Flush();
+            }
             _settings.PropertyChanged += _Settings_PropertyChanged;
             _settings.Update();
         }
@@ -131,6 +134,7 @@ namespace Auto_Backlight_for_ThinkPad
                 _autoScreen.Curvature = _settings.Screen_Curvature;
 
             _settings.SaveToRegistry(RegistryKey);
+            RegistryKey.Flush();
         }
         // Stop and cleanup on app exit
         private void _Exiting(object sender, ExitEventArgs e)
@@ -139,6 +143,7 @@ namespace Auto_Backlight_for_ThinkPad
             _autoScreen.Stop();
 
             _settings.SaveToRegistry(RegistryKey);
+            RegistryKey.Flush();
         }
         // Show the screen brightness vs ambient light level calibration window
         private void _ShowCalibration(object sender, RoutedEventArgs e)
