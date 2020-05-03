@@ -437,4 +437,50 @@ namespace Auto_Backlight_for_ThinkPad
             throw new ArgumentException();
         }
     }
+    /// <summary>
+    /// Format brightness level (0/1/2) into friendly text
+    /// </summary>
+    public class BrightnessLevelFormatter : IValueConverter
+    {
+        /// <summary>
+        /// Convert level to friendly display string
+        /// </summary>
+        /// <param name="value">0/1/2</param>
+        /// <param name="targetType">string</param>
+        /// <param name="parameter">unused</param>
+        /// <param name="culture">unused</param>
+        /// <returns>friendly display string</returns>
+        public object Convert(object value, Type targetType, object parameter = null, CultureInfo culture = null)
+        {
+            if (value.GetType() == typeof(int) && targetType == typeof(string))
+            {
+                if (value == null) return "";
+                int val = (int)value;
+                if (val == 0) return "Off";
+                if (val == 1) return "Low";
+                if (val == 2) return "Full";
+            }
+            throw new ArgumentException();
+        }
+        /// <summary>
+        /// Parse string into level
+        /// </summary>
+        /// <param name="value">string</param>
+        /// <param name="targetType">int</param>
+        /// <param name="parameter">unused</param>
+        /// <param name="culture">unused</param>
+        /// <returns>level 0/1/2</returns>
+        public object ConvertBack(object value, Type targetType, object parameter = null, CultureInfo culture = null)
+        {
+            if (value.GetType() == typeof(string) && targetType == typeof(int))
+            {
+                if (value == null) return -1;
+                string str = (string)value;
+                if (str == "Off") return 0;
+                if (str == "Low") return 1;
+                if (str == "Full") return 2;
+            }
+            throw new ArgumentException();
+        }
+    }
 }

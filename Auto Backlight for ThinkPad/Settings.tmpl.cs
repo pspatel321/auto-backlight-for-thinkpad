@@ -17,7 +17,7 @@
 // <tmpl Keys="Type_; Name_; def_; min_; max_; unit_; help_">
 // bool; Keyboard_Enabled; true; false; true; ""; "Enable automatic keyboard backlight control with user activity timeout"
 // double; Keyboard_InactivityTimeout; 60; 1; double.PositiveInfinity; "s"; "Keyboard backlight timeout after user inactivity"
-// int; Keyboard_OnLevel; 2; 0; 2; ""; "Keyboard backlight brightness level"
+// int; Keyboard_OnLevel; 2; 0; 2; ""; "Keyboard backlight brightness level when illuminated"
 // bool; Screen_Enabled; true; false; true; ""; "Enable automatic screen brightness control with ambient light level from webcam image"
 // double; Screen_PollPeriod; double.PositiveInfinity; 1; double.PositiveInfinity; "s"; "Screen brightness refresh period from webcam image"
 // bool; Screen_HotKeyEnabled; true; false; true; ""; "Enable a hotKey to trigger manual screen brightness refresh"

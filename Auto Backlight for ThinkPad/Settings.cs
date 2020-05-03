@@ -364,7 +364,7 @@ namespace Auto_Backlight_for_ThinkPad
             {
                 _raw.Keyboard_Enabled = new Metadata<bool>(true, false, true, "", "Enable automatic keyboard backlight control with user activity timeout");
                 _raw.Keyboard_InactivityTimeout = new Metadata<double>(60, 1, double.PositiveInfinity, "s", "Keyboard backlight timeout after user inactivity");
-                _raw.Keyboard_OnLevel = new Metadata<int>(2, 0, 2, "", "Keyboard backlight brightness level");
+                _raw.Keyboard_OnLevel = new Metadata<int>(2, 0, 2, "", "Keyboard backlight brightness level when illuminated");
                 _raw.Screen_Enabled = new Metadata<bool>(true, false, true, "", "Enable automatic screen brightness control with ambient light level from webcam image");
                 _raw.Screen_PollPeriod = new Metadata<double>(double.PositiveInfinity, 1, double.PositiveInfinity, "s", "Screen brightness refresh period from webcam image");
                 _raw.Screen_HotKeyEnabled = new Metadata<bool>(true, false, true, "", "Enable a hotKey to trigger manual screen brightness refresh");

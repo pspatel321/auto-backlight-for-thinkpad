@@ -25,11 +25,12 @@ limitations under the License.
     <Application.Resources>
         <local:Settings x:Key="Settings"/>
         <local:TimeFormatter x:Key="TimeFormatter"/>
+        <local:BrightnessLevelFormatter x:Key="BrightnessLevelFormatter"/>
         <ContextMenu x:Key="SysTrayMenu">
             <MenuItem Header="Settings">
                 <MenuItem StaysOpenOnClick="True" IsCheckable="True" IsChecked="{Binding Keyboard_Enabled, Mode=TwoWay, Source={StaticResource Settings}}" Initialized="KeyboardMenu_Init"
                           ToolTip="{Binding Path=Meta.Keyboard_Enabled.Help, Source={StaticResource Settings}}">
-                <MenuItem.Header>
+                    <MenuItem.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="175"/>
@@ -51,10 +52,28 @@ limitations under the License.
                         </Grid>
                     </MenuItem.Header>
                 </MenuItem>
+                <MenuItem StaysOpenOnClick="True" IsCheckable="False"
+                          ToolTip="{Binding Path=Meta.Keyboard_OnLevel.Help, Source={StaticResource Settings}}">
+                    <MenuItem.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="175"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" HorizontalAlignment="Left" Content="Choose brightness level"/>
+                            <ComboBox Grid.Column="1" Margin="0,0,-50,0" HorizontalAlignment="Right" IsEditable="False" Height="23" Width="100" Text="{Binding Keyboard_OnLevel, Converter={StaticResource BrightnessLevelFormatter}, Mode=TwoWay, Source={StaticResource Settings}, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding Keyboard_Enabled, Source={StaticResource Settings}}"
+                                  ToolTip="{Binding Path=Meta.Keyboard_OnLevel.Help, Source={StaticResource Settings}}">
+                                <ComboBoxItem Content="Off"/>
+                                <ComboBoxItem Content="Low"/>
+                                <ComboBoxItem Content="Full"/>
+                            </ComboBox>
+                        </Grid>
+                    </MenuItem.Header>
+                </MenuItem>
                 <Separator/>
                 <MenuItem StaysOpenOnClick="True" IsCheckable="True" IsChecked="{Binding Screen_Enabled, Mode=TwoWay, Source={StaticResource Settings}}" Initialized="ScreenMenu_Init"
                           ToolTip="{Binding Path=Meta.Screen_Enabled.Help, Source={StaticResource Settings}}">
-                <MenuItem.Header>
+                    <MenuItem.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="175"/>
