@@ -378,34 +378,42 @@ namespace Auto_Backlight_for_ThinkPad
                     e.Handled = true;
                 }
             };
-            Plot.QueryCursor += (sender, e) =>
+            Action queryCursor = () =>
             {
-                var pos = e.GetPosition(Plot);
+                var pos = Mouse.GetPosition(Plot);
                 var pt = new OxyPlot.ScreenPoint(pos.X, pos.Y);
-                var inside = Plot.ActualModel.PlotArea.Contains(pt);
-                if (inside)
-                {
-                    e.Handled = true;
-                    e.Cursor = Cursors.Cross;
 
-                    // Over point means drag operation
-                    var hitPoint = ScatterSeries.InternalSeries.HitTest(new OxyPlot.HitTestArguments(pt, ScatterSeries.MarkerSize));
-                    if (hitPoint != null)
-                        e.Cursor = Cursors.SizeAll;
-                    // Ctrl pressed means Delete or Insert operation
-                    if (Keyboard.Modifiers == ModifierKeys.Control)
-                        if (hitPoint != null)
-                            e.Cursor = Cursors.No;
-                        else
-                            e.Cursor = Cursors.UpArrow;
-                    // During drag operation
-                    if (dragIdx >= 0)
-                        e.Cursor = Cursors.None;
+                Cursor cr = Cursors.Cross;
+                var inside = Plot.ActualModel.PlotArea.Contains(pt);
+                if (!inside)
+                {
+                    Plot.Cursor = null;
+                    return;
                 }
-                allowMove = e.Cursor == Cursors.SizeAll;
-                allowAdd = e.Cursor == Cursors.UpArrow;
-                allowRemove = e.Cursor == Cursors.No;
+
+                // Over point means drag operation
+                var hitPoint = ScatterSeries.InternalSeries.HitTest(new OxyPlot.HitTestArguments(pt, ScatterSeries.MarkerSize));
+                if (hitPoint != null)
+                    cr = Cursors.SizeAll;
+                // Ctrl pressed means Delete or Insert operation
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    if (hitPoint != null)
+                        cr = Cursors.No;
+                    else
+                        cr = Cursors.UpArrow;
+                // During drag operation
+                if (dragIdx >= 0)
+                    cr = Cursors.None;
+
+                Plot.Cursor = cr;
+                allowMove = cr == Cursors.SizeAll;
+                allowAdd = cr == Cursors.UpArrow;
+                allowRemove = cr == Cursors.No;
             };
+            Plot.MouseMove += (sender, e) => { queryCursor(); };
+            KeyDown += (sender, e) => { if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl) queryCursor(); };
+            KeyUp += (sender, e) => { if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl) queryCursor(); };
+
             ContextMenu cm = (ContextMenu)Plot.FindResource("PlotMenu");
             Plot.PreviewMouseRightButtonUp += (sender, e) =>
             {
@@ -501,15 +509,6 @@ namespace Auto_Backlight_for_ThinkPad
             _LearnedPoints[_LearnedPoints.IndexOf(point)] = (DataPoint)xyd.Tag;
             _LearnedPoints = _LearnedPoints;
         }
-        private void _MenuHelp(object sender, RoutedEventArgs e)
-        {
-            string helpStr =
-@"The points on the plot represent mappings from ambient light level to screen brightness level. The smoothed spline curve will actually be used to perform finer mapping. The curve must be a single-valued function, otherwise, an error is generated. The user must correct the curve by manipulating the hard points, or adjusting the curvature slider.
-
-A point can be moved by dragging the point. A point can be added by Ctrl-click over an empty region. A point can be removed by Ctrl-click over the point. The right-click context menu can also manipulate a point.";
-            MessageBox.Show(helpStr, "Calibration Help", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         private DataPoint _Current
         {
             get => new DataPoint(CurrentLineX.X, CurrentLineY.Y);

@@ -61,7 +61,7 @@ limitations under the License.
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" HorizontalAlignment="Left" Content="Choose brightness level"/>
-                            <ComboBox Grid.Column="1" Margin="0,0,-50,0" HorizontalAlignment="Right" IsEditable="False" Height="23" Width="100" Text="{Binding Keyboard_OnLevel, Converter={StaticResource BrightnessLevelFormatter}, Mode=TwoWay, Source={StaticResource Settings}, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding Keyboard_Enabled, Source={StaticResource Settings}}"
+                            <ComboBox Grid.Column="1" Margin="0,0,-50,0" HorizontalAlignment="Right" Height="23" Width="100" Text="{Binding Keyboard_OnLevel, Converter={StaticResource BrightnessLevelFormatter}, Mode=TwoWay, Source={StaticResource Settings}, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding Keyboard_Enabled, Source={StaticResource Settings}}"
                                   ToolTip="{Binding Path=Meta.Keyboard_OnLevel.Help, Source={StaticResource Settings}}">
                                 <ComboBoxItem Content="Off"/>
                                 <ComboBoxItem Content="Low"/>

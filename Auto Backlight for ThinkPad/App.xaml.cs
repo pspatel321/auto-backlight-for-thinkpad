@@ -65,6 +65,11 @@ namespace Auto_Backlight_for_ThinkPad
             _autoScreen.BrightnessChanged += (se, ev) =>
             {
                 _lastPoint = new DataPoint(ev.Intensity, ev.Brightness);
+                // Update the calibration graph if it is open
+                if (_calibration != null)
+                {
+                    _calibration.CurrentPoint = new DataPoint(ev.Intensity, ev.Brightness);
+                }
             };
             _autoKeyboard.Activity += (se, ev) =>
             {
@@ -73,9 +78,8 @@ namespace Auto_Backlight_for_ThinkPad
                 {
                     _settings.Keyboard_OnLevel = _autoKeyboard.OnLevel;
                 }
-                // Refresh screen brightness on user activity or power resume events from keyboard
-                if ((ev.Act == AutoKeyboardBacklightController.ActivityEventArgs.Activity.UserActivity) ||
-                    (ev.Act == AutoKeyboardBacklightController.ActivityEventArgs.Activity.PowerResume))
+                // Refresh screen brightness on power resume events
+                if (ev.Act == AutoKeyboardBacklightController.ActivityEventArgs.Activity.PowerResume)
                 {
                     if (_autoScreen.Enabled) _ = _autoScreen.Retrigger();
                 }
@@ -122,7 +126,7 @@ namespace Auto_Backlight_for_ThinkPad
                 _autoScreen.PollPeriod = _settings.Screen_PollPeriod;
 
             if (e.PropertyName == nameof(_settings.Screen_HotKeyEnabled))
-                _autoScreen.IsHotKeyEnabled = _settings.Screen_HotKeyEnabled;
+                _autoScreen.HotKeyEnabled = _settings.Screen_HotKeyEnabled;
 
             if (e.PropertyName == nameof(_settings.Screen_HotKey))
                 _autoScreen.HotKey = HotKey.Parse(_settings.Screen_HotKey);
@@ -153,7 +157,10 @@ namespace Auto_Backlight_for_ThinkPad
                 // Create new window from saved points if not already open
                 _calibration = new Calibration(_settings.Screen_LearnedPoints.Select(p => new DataPoint(p.Item1, p.Item2)).ToList(), _settings.Screen_Curvature);
                 if (_lastPoint != null) _calibration.CurrentPoint = (DataPoint)_lastPoint;
-                _autoScreen.Stop();
+                var isEn = _autoScreen.Enabled;
+                var isHkEn = _autoScreen.HotKeyEnabled;
+                _autoScreen.Enabled = false;
+                _autoScreen.HotKeyEnabled = false;
                 var tempScreen = new AutoScreenBrightnessController(null);
                 tempScreen.BrightnessChanged += (sen, eve) =>
                 {
@@ -175,16 +182,20 @@ namespace Auto_Backlight_for_ThinkPad
                 _calibration.Closed += (sen, eve) =>
                 {
                     _calibration = null;
-                    if (_settings.Screen_Enabled) 
-                        _autoScreen.Start(false);
+                    _autoScreen.Enabled = isEn;
+                    _autoScreen.HotKeyEnabled = isHkEn;
                 };
                 _calibration.Apply += (sen, eve) =>
                 {
-                    // Transfer points on Apply, refresh screen brightness
+                    // Changed?
+                    
+                    // Transfer points on Apply
                     _settings.Screen_Curvature = _calibration.Curvature;
                     _settings.Screen_LearnedPoints.Clear();
                     _settings.Screen_LearnedPoints.AddRange(_calibration.LearnedPoints.Select(p => new Tuple<double, double>(p.X, p.Y)).ToList());
                     _settings.Screen_LearnedPoints = _settings.Screen_LearnedPoints;
+                    
+                    _ = _autoScreen.Retrigger();
                 };
             }
             _calibration.Show();
@@ -273,14 +284,14 @@ namespace Auto_Backlight_for_ThinkPad
         private void _HotKeyBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            _autoScreen.IsHotKeyEnabled = false;
+            _autoScreen.HotKeyEnabled = false;
         }
         // HotKey box, save final shortcut after user is done editing, unblock shortcut
         private void _HotKeyBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
             _settings.Screen_HotKey = tb.Text;
-            _autoScreen.IsHotKeyEnabled = _settings.Screen_HotKeyEnabled;
+            _autoScreen.HotKeyEnabled = _settings.Screen_HotKeyEnabled;
         }
 
         private MenuItem _scm;

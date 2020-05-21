@@ -73,8 +73,6 @@ limitations under the License.
                     <MenuItem Header="Add point" Click="_MenuAddPoint" />
                     <MenuItem Header="Remove point" Click="_MenuRemovePoint"/>
                     <MenuItem Header="Edit point ..." Click="_MenuEditPoint"/>
-                    <Separator/>
-                    <MenuItem Header="Help ..." Click="_MenuHelp"/>
                 </ContextMenu>
                 <Window x:Key="XYDialog" Title="Edit point ..." Background="#FF282828" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Topmost="True">
                     <Window.Resources>

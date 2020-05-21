@@ -82,20 +82,20 @@ namespace Auto_Backlight_for_ThinkPad
         /// <summary>
         /// Enable the hotkey
         /// </summary>
-        public bool IsHotKeyEnabled
+        public bool HotKeyEnabled
         {
-            get => _isHotKeyEnabled;
+            get => _hotKeyEnabled;
             set
             {
-                if (_isHotKeyEnabled != value)
+                if (_hotKeyEnabled != value)
                 {
-                    _isHotKeyEnabled = value;
+                    _hotKeyEnabled = value;
                     HotKey hk = _hke.HotKey;
 
                     // Re-register the hotkey if it is valid
                     if (hk != null)
                         if (hk.Key != System.Windows.Input.Key.None)
-                            if (_isHotKeyEnabled) _ghk.RegisterHotKey(_hke);
+                            if (_hotKeyEnabled) _ghk.RegisterHotKey(_hke);
                             else _ghk.UnregisterHotKeys();
                 }
             }
@@ -117,7 +117,7 @@ namespace Auto_Backlight_for_ThinkPad
                     // Re-register the hotkey if it is valid
                     if (hk != null)
                         if (hk.Key != System.Windows.Input.Key.None)
-                            if (_isHotKeyEnabled) _ghk.RegisterHotKey(_hke);
+                            if (_hotKeyEnabled) _ghk.RegisterHotKey(_hke);
                             else _ghk.UnregisterHotKeys();
                 }
             }
@@ -248,7 +248,7 @@ namespace Auto_Backlight_for_ThinkPad
 
         private bool _enabled = false;
         private double _pollPeriod = double.NaN;
-        private bool _isHotKeyEnabled = false;
+        private bool _hotKeyEnabled = false;
         private List<DataPoint> _smoothedPoints = new List<DataPoint>();
         private List<DataPoint> _learnedPoints = new List<DataPoint>();
         private DispatcherTimer _timer;
