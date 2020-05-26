@@ -36,7 +36,7 @@ namespace Auto_Backlight_for_ThinkPad
         /// <summary>
         /// Access to Registry key for this application
         /// </summary>
-        public static RegistryKey RegistryKey = Registry.CurrentUser.CreateSubKey(@"Software\" + Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product);
+        public static RegistryKey RegistryKey;
 
         /// <summary>
         /// Main application
@@ -98,6 +98,8 @@ namespace Auto_Backlight_for_ThinkPad
         // Setup on app startup
         private void _Starting(object sender, StartupEventArgs e)
         {
+            RegistryKey = Registry.CurrentUser.CreateSubKey(@"Software\" + Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product);
+
             // Try to get settings, if fail save a fresh copy
             if (!_settings.RestoreFromRegistry(RegistryKey))
             {
@@ -147,7 +149,7 @@ namespace Auto_Backlight_for_ThinkPad
             _autoScreen.Stop();
 
             _settings.SaveToRegistry(RegistryKey);
-            RegistryKey.Flush();
+            RegistryKey.Close();
         }
         // Show the screen brightness vs ambient light level calibration window
         private void _ShowCalibration(object sender, RoutedEventArgs e)
@@ -187,14 +189,12 @@ namespace Auto_Backlight_for_ThinkPad
                 };
                 _calibration.Apply += (sen, eve) =>
                 {
-                    // Changed?
-                    
                     // Transfer points on Apply
                     _settings.Screen_Curvature = _calibration.Curvature;
                     _settings.Screen_LearnedPoints.Clear();
                     _settings.Screen_LearnedPoints.AddRange(_calibration.LearnedPoints.Select(p => new Tuple<double, double>(p.X, p.Y)).ToList());
                     _settings.Screen_LearnedPoints = _settings.Screen_LearnedPoints;
-                    
+
                     _ = _autoScreen.Retrigger();
                 };
             }
@@ -220,22 +220,26 @@ namespace Auto_Backlight_for_ThinkPad
         // Update procedure, quiet version showing fewer user message boxes (unlike verbose version in About.xaml.cs)
         private async void _OnlineUpdateProcedure()
         {
-            using (OnlineUpdater ou = new OnlineUpdater())
+            try
             {
-                // Check for updates, prompt only if update is found
-                var ver = Assembly.GetExecutingAssembly().GetName().Version;
-                var update = await ou.GetLatestVersion();
+                using (OnlineUpdater ou = new OnlineUpdater())
+                {
+                    // Check for updates, prompt only if update is found
+                    var ver = Assembly.GetExecutingAssembly().GetName().Version;
+                    var update = await ou.GetLatestVersion();
 
-                if (update != null)
-                    if (update.Version > ver)
-                        if (MessageBoxResult.Yes == MessageBox.Show(string.Format("An update is available for {0}.\n\nThe latest version is: {1}.\nYour version is: {2}.\n\nWould you like to download the update?", Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product, update.Version, ver), "Update is available", MessageBoxButton.YesNo, MessageBoxImage.Warning))
-                            if (await ou.DownloadVersion(update))
-                                // Installer started, must quit this instance
-                                Application.Current.Dispatcher.Invoke(() => Application.Current.Shutdown());
-                            else
-                                // Error
-                                MessageBox.Show(string.Format("Could not download update for {0}.", Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product, ver), "Could not download", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (update != null)
+                        if (update.Version > ver)
+                            if (MessageBoxResult.Yes == MessageBox.Show(string.Format("An update is available for {0}.\n\nThe latest version is: {1}.\nYour version is: {2}.\n\nWould you like to download the update?", Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product, update.Version, ver), "Update is available", MessageBoxButton.YesNo, MessageBoxImage.Warning))
+                                if (await ou.DownloadVersion(update))
+                                    // Installer started, must quit this instance
+                                    Application.Current.Dispatcher.Invoke(() => Application.Current.Shutdown());
+                                else
+                                    // Error
+                                    MessageBox.Show(string.Format("Could not download update for {0}.", Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product, ver), "Could not download", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
+            catch (Exception) { }
         }
 
         #region Boxes
